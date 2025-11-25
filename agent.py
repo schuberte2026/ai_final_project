@@ -8,7 +8,7 @@ class Agent:
     '''A class to manage the agent'''
     
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    def __init__(self, actions, alpha=0.001, gamma=0.9, epsilon=0.1, epsilon_min=0.001, epsilon_max=0.99, epsilon_decay=0.999):
+    def __init__(self, actions, alpha=0.001, gamma=0.9, epsilon=0.1, epsilon_min=0.001, epsilon_max=0.99, epsilon_decay=0.999, do_epsilon_decay=False):
         '''Set up the constructor
             Takes -- config, a dictionary specifying the track dimensions and initial state
         '''
@@ -18,6 +18,7 @@ class Agent:
         self.epsilon_min = epsilon_min
         self.epsilon_max = epsilon_max
         self.epsilon_decay = epsilon_decay
+        self.do_epsilon_decay = do_epsilon_decay
         self.actions = actions
         self.Q = defaultdict(lambda: defaultdict(lambda: 0.0))
 
@@ -46,7 +47,8 @@ class Agent:
         # update
         self.Q[previous_state][action_taken] = q_state_action + \
                                        self.alpha * (target - q_state_action)
-        # self.decay_epsilon()
+        if self.do_epsilon_decay:
+            self.decay_epsilon()
 
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     def decay_epsilon(self):
