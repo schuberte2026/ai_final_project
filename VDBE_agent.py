@@ -34,7 +34,7 @@ class VDBE_agent:
             return np.random.choice(self.actions)
         
         q_vals = self.Q[s]
-        return max(q_vals, key=q_vals.get) if len(q_vals) == 0 else np.random.choice(self.actions)
+        return max(q_vals, key=q_vals.get) if len(q_vals) != 0 else np.random.choice(self.actions)
 
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     def update_Q_learning(self,new_state,action_taken,reward,previous_state, done):
@@ -43,7 +43,7 @@ class VDBE_agent:
             target = reward
         else:
             next_q_values = self.Q[new_state].values()
-            target = reward + self.gamma * (max(next_q_values) if next_q_values else 0.0)
+            target = reward + self.gamma * max(next_q_values)
 
         # update Q
         new_q = old_q + self.alpha * (target - old_q)
