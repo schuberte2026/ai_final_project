@@ -43,7 +43,7 @@ class VDBE_agent:
             target = reward
         else:
             next_q_values = self.Q[new_state].values()
-            target = reward + self.gamma * max(next_q_values)
+            target = reward + self.gamma * max(next_q_values) if len(next_q_values) != 0 else 0.0
 
         # update Q
         new_q = old_q + self.alpha * (target - old_q)
