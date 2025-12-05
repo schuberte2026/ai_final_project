@@ -76,8 +76,8 @@ def train(agent : Agent, env_name: str, num_episodes=10_000, render=False):
     return agent, magnitudes_over_time, rewards_over_time
 
 def main():
-    environments_dict= {"LunarLander-v3": [0, 1, 2, 3], "Blackjack-v1": [0,1], "CliffWalking-v1": [0, 1, 2, 3],"Taxi-v3": [0, 1, 2, 3, 4, 5],}
-    num_turns_to_train = 10_000
+    environments_dict= {"CliffWalking-v1": [0, 1, 2, 3],"Taxi-v3": [0, 1, 2, 3, 4, 5],}
+    num_turns_to_train = 3_000
 
     training_histories_per_environment = {env : {agent : {} for agent in ['flat', 'decay', 'vdbe']} for env in environments_dict} # store {env {agent : {'magnitudes' : [], 'rewards' : []} } } 
     for env_name in environments_dict:

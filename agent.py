@@ -8,7 +8,7 @@ class Agent:
     '''A class to manage the agent'''
     
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    def __init__(self, actions, alpha=0.001, gamma=0.9, epsilon=0.1, epsilon_min=0.001, epsilon_max=0.99, epsilon_decay=0.999, do_epsilon_decay=False):
+    def __init__(self, actions, alpha=0.001, gamma=0.9, epsilon=0.1, epsilon_min=0.001, epsilon_max=0.99, epsilon_decay=0.9, do_epsilon_decay=False):
         '''Set up the constructor
             Takes -- config, a dictionary specifying the track dimensions and initial state
         '''
