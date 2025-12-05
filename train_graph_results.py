@@ -6,6 +6,8 @@ from tqdm import tqdm
 from agent import Agent
 from VDBE_agent import VDBE_agent
 
+CONVERGENCE_THRESHOLD = 1e-9
+
 def calc_q_table_magnitude(q_values : dict):
     # calculate L1 norm of q_value matrix 
     # each key is a column, each value of the key is a row element
@@ -41,7 +43,10 @@ def train(agent : Agent, env_name: str, num_episodes=10_000, render=False):
     magnitudes_over_time = []
     rewards_over_time = []
 
-    for _ in tqdm(range(num_episodes)):
+    magnitude_converged = False
+    rewards_converged = False
+
+    for i in tqdm(range(num_episodes)):
         # Reset environment to start a new episode
         observation, info = env.reset()
         observation = tuple(observation) if type(observation) == np.ndarray else observation
@@ -71,6 +76,21 @@ def train(agent : Agent, env_name: str, num_episodes=10_000, render=False):
         q_magnitude = calc_q_table_magnitude(agent.Q)
         magnitudes_over_time.append(q_magnitude)
         rewards_over_time.append(total_reward)
+
+        # check if convergence has occurred
+        
+        if i > 1:
+            gradient = np.gradient(magnitudes_over_time)
+            if not magnitude_converged and \
+            gradient[-2] - gradient[-1] < CONVERGENCE_THRESHOLD:
+                print('magnitude converged at episode', i)
+                magnitude_converged = True
+            gradient = np.gradient(rewards_over_time)
+            if not rewards_converged and \
+            gradient[-2] - gradient[-1] < CONVERGENCE_THRESHOLD:
+                print('reward converged at episode', i)
+                rewards_converged = True
+
         
     env.close()
     return agent, magnitudes_over_time, rewards_over_time
